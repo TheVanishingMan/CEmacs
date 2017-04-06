@@ -1,0 +1,9 @@
+# .gitignore for kilo.c
+# Just in case I forget to delete something before I push
+
+# No backup files
+*~
+
+# Nothing compiled
+# cc kilo.c -o kilo
+kilo
