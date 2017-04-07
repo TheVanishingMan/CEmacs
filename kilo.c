@@ -267,9 +267,17 @@ void abFree(struct abuf *ab) {
 
 void editorMoveCursor(int key) {
   erow *row = (E.cy >= E.numrows) ? NULL : &E.row[E.cy];
-
+  
   switch (key) {
   case ARROW_LEFT:
+    if (E.cx != 0) {
+      E.cx--;
+    } else if (E.cy > 0) {
+      E.cy--;
+      E.cx = E.row[E.cy].size;
+    }
+    break;
+  case CTRL_KEY('b'): // ARROW_LEFT
     if (E.cx != 0) {
       E.cx--;
     } else if (E.cy > 0) {
@@ -285,12 +293,30 @@ void editorMoveCursor(int key) {
       E.cx = 0;
     }
     break;
+  case CTRL_KEY('f'): // ARROW_RIGHT
+    if (row && E.cx < row->size) {
+      E.cx++;
+    } else if (row && E.cx == row->size) {
+      E.cy++;
+      E.cx = 0;
+    }
+    break;
   case ARROW_UP:
     if (E.cy != 0) {
       E.cy--;
     }
     break;
+  case CTRL_KEY('p'): // ARROW_UP
+    if (E.cy != 0) {
+      E.cy--;
+    }
+    break;
   case ARROW_DOWN:
+    if (E.cy != E.numrows) {
+      E.cy++;
+    }
+    break;
+  case CTRL_KEY('n'):
     if (E.cy != E.numrows) {
       E.cy++;
     }
@@ -313,11 +339,11 @@ void editorProcessKeypress() {
     exit(0);
     break;
 
-  case HOME_KEY:
+  case CTRL_KEY('a'): // case HOME_KEY:
     E.cx = 0;
     break;
     
-  case END_KEY:
+  case CTRL_KEY('e'): // case END_KEY:
     if (E.cy < E.numrows)
       E.cx = E.row[E.cy].size;
     break;
@@ -336,6 +362,10 @@ void editorProcessKeypress() {
     }
     break;
 
+  case CTRL_KEY('p'): // ARROW_UP
+  case CTRL_KEY('n'): // ARROW_DOWN
+  case CTRL_KEY('b'): // ARROW_LEFT
+  case CTRL_KEY('f'): // ARROW_RIGHT
   case ARROW_UP:
   case ARROW_DOWN:
   case ARROW_LEFT:
