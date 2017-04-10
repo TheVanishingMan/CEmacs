@@ -221,6 +221,15 @@ void editorAppendRow(char *s, size_t len) {
   E.numrows++;
 }
 
+void editorRowInsertChar(erow *row, int at, int c) {
+  if (at < 0 || at > row->size) at = row->size;
+  row->chars = realloc(row->chars, row->size + 2);
+  memmove(&row->chars[at + 1], &row->chars[at], row->size - at + 1);
+  row->size++;
+  row->chars[at] = c;
+  editorUpdateRow(row);
+}
+
 /*** file i/o ***/
 
 void editorOpen(char *filename) {
@@ -405,7 +414,7 @@ void editorDrawRows(struct abuf *ab) {
       if (E.numrows == 0 && y == E.screenrows / 3) {
 	char welcome[100];
 	int welcomelen = snprintf(welcome, sizeof(welcome),
-				  "Kilo Editor -- version %s", KILO_VERSION);
+				  "CEmacs -- version %s", KILO_VERSION);
 	if (welcomelen > E.screencols) welcomelen = E.screencols;
 	int padding = (E.screencols - welcomelen) / 2;
 	if (padding) {
@@ -468,10 +477,10 @@ void editorRefreshScreen() {
   
   abAppend(&ab, "\x1b[?25l", 6); // hide cursor
   abAppend(&ab, "\x1b[H", 3); // clear screen
-  
+
   editorDrawRows(&ab);
   editorDrawStatusBar(&ab);
-  editorDrawMessageBar(&ab);
+  editorDrawMessageBar(&ab);  
   
   char buf[32];
   snprintf(buf, sizeof(buf), "\x1b[%d;%dH", (E.cy - E.rowoff) + 1, (E.rx - E.coloff) + 1);
