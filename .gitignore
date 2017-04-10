@@ -5,5 +5,5 @@
 *~
 
 # Nothing compiled
-# cc kilo.c -o kilo
-kilo
+# cc cemacs.c -o run-cemacs
+run-cemacs
