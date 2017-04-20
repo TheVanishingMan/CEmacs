@@ -1,4 +1,4 @@
-# CEmacs
+# CEmacs
 An emacs-like text editor based off the Kilo Editor.
 
 Inspired by an article I found posted on hackernews. [Article](http://viewsourcecode.org/snaptoken/kilo/) | [Comments](https://news.ycombinator.com/item?id=14046446)
