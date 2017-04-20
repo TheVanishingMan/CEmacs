@@ -1,0 +1,38 @@
+#!/bin/bash
+
+# short script to reference in the .bashrc for performing calls to the cemacs executable
+# add > 'source ~/.cemacs/cemacs-script' into your bashrc
+
+function cemacs {
+
+    # Only you can prevent i/o errors.
+    if [[ ! -e run-cemacs ]]; then
+	#echo "[2] Error. Could not find cemacs."
+	echo "Could not find cemacs, running the make command."
+	make
+	#echo $?
+	if [[ $? = 2 ]]; then
+	    printf "\033[0;31m[2] Error. Executable did not exist and could not be compiled.\033[0m\n"
+	    exit 2
+	fi
+	echo "Successfully compiled."
+	clear
+    fi
+
+    # check if there are any arguments
+    if [[ ! -z $1 ]]; then
+	# if there is an argument, but file does not exist, create the file.
+	if [[ ! -e $1 ]]; then
+	touch $1
+	./run-cemacs $1
+	else
+	    # if the file does exist, edit it.
+	    ./run-cemacs $1
+	fi
+    else
+    ./run-cemacs
+    fi
+}
+
+
+
